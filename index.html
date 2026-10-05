@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASF Tempo — Previsão do tempo do litoral norte de SP (16 dias, por cidade)</title>
+<meta name="description" content="Previsão do tempo detalhada para Ubatuba, Caraguatatuba, São Sebastião e Ilhabela: 16 dias, chuva mm a mm, vento, umidade, UV e alertas automáticos de chuva forte e vendaval. Dados Open-Meteo, atualizados a cada visita.">
+<link rel="canonical" href="https://acarolmourad-commits.github.io/asf-tempo/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="author" content="ASF — Associação de Surf Feminino">
+<meta name="language" content="pt-BR">
+<meta name="theme-color" content="#0e2439">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ASF — Associação de Surf Feminino">
+<meta property="og:title" content="ASF Tempo — Previsão do litoral norte de SP, 16 dias por cidade">
+<meta property="og:description" content="Chuva, vento, temperatura e alertas para Ubatuba, Caraguatatuba, São Sebastião e Ilhabela. Atualizado em tempo real.">
+<meta property="og:url" content="https://acarolmourad-commits.github.io/asf-tempo/">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"ASF Tempo","url":"https://acarolmourad-commits.github.io/asf-tempo/","applicationCategory":"WeatherApplication","operatingSystem":"Web","inLanguage":"pt-BR","isPartOf":{"@type":"WebSite","name":"ASF — Associação Surf Feminino","url":"https://acarolmourad-commits.github.io/asf-app/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"De onde vêm os dados da previsão ASF Tempo?","acceptedAnswer":{"@type":"Answer","text":"Os dados vêm da API Open-Meteo, que combina modelos meteorológicos globais e regionais (como ECMWF e ICON), atualizados várias vezes ao dia. A página busca os dados ao vivo a cada visita — a previsão é sempre a mais recente disponível."}},{"@type":"Question","name":"Os alertas do ASF Tempo são oficiais da Defesa Civil?","acceptedAnswer":{"@type":"Answer","text":"Não. Os alertas da página são automáticos, gerados por limites de chuva, vento e trovoadas sobre a previsão numérica. Os alertas oficiais vêm da Defesa Civil Estadual de SP, do INMET e do CEMADEN — consulte sempre os canais oficiais em situações de risco."}},{"@type":"Question","name":"Quanta chuva é considerada perigosa no litoral norte de SP?","acceptedAnswer":{"@type":"Answer","text":"Referências usadas por órgãos como Defesa Civil e CEMADEN: acima de 25 mm em 24h já pede atenção; acima de 50 mm há risco de alagamentos; acima de 80 mm em 24h o risco de deslizamentos nas encostas da Serra do Mar é elevado."}},{"@type":"Question","name":"Qual a melhor fonte oficial de alertas meteorológicos?","acceptedAnswer":{"@type":"Answer","text":"INMET (alertas.inmet.gov.br), Defesa Civil Estadual de SP (defesacivil.sp.gov.br, SMS 40199) e CEMADEN (cemaden.gov.br) para monitoramento de chuvas e deslizamentos em tempo real."}}]}
+</script>
+<style>
+:root{--azul:#0e2439;--ciano:#00a8cc;--amarelo:#f4d03f;--laranja:#e67e22;--vermelho:#c0392b;--verde:#2ecc71;--bg:#eef4f8;--cinza:#5b6b7a}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:var(--bg);color:var(--azul)}
+header{background:linear-gradient(135deg,#0e2439,#00a8cc);color:#fff;padding:2.2rem 1rem;text-align:center}
+header p{max-width:680px;margin:.5rem auto 0;opacity:.92;font-size:.95rem}
+.tabs{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.8rem .5rem;background:var(--azul);position:sticky;top:0;z-index:20}
+.tabs button{background:rgba(255,255,255,.12);color:#fff;border:none;padding:.55rem 1.1rem;border-radius:2rem;font-size:.9rem;cursor:pointer}
+.tabs button.ativo{background:var(--ciano);font-weight:700}
+main{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.card{background:#fff;border-radius:1rem;padding:1.3rem;margin-bottom:1.3rem;box-shadow:0 2px 10px rgba(14,36,57,.08)}
+.card h2{margin-bottom:.7rem;font-size:1.15rem}
+.hoje{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+.hoje .big{font-size:3rem;font-weight:800}
+.grid7{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:.6rem}
+.day{background:var(--bg);border-radius:.8rem;padding:.7rem .5rem;text-align:center;font-size:.8rem}
+.day b{display:block;font-size:.95rem}
+.day .icone{font-size:1.5rem}
+.barra{height:6px;border-radius:3px;background:#dbe7ef;margin:.35rem 0;overflow:hidden}
+.barra i{display:block;height:100%;background:var(--ciano)}
+.alerta{border-radius:.8rem;padding:.9rem 1rem;margin:.5rem 0;color:#fff;font-size:.92rem}
+.al-verde{background:var(--verde)} .al-amarelo{background:#d4ac0d} .al-laranja{background:var(--laranja)} .al-vermelho{background:var(--vermelho)}
+.alerta b{text-transform:uppercase}
+table.d16{width:100%;border-collapse:collapse;font-size:.82rem}
+table.d16 th,table.d16 td{padding:.45rem .3rem;border-bottom:1px solid #e6edf3;text-align:center}
+table.d16 th{color:var(--cinza);font-size:.68rem;text-transform:uppercase}
+table.d16 td:first-child{text-align:left;font-weight:600}
+.horas{display:flex;gap:.5rem;overflow-x:auto;padding:.3rem 0}
+.hora{min-width:74px;background:var(--bg);border-radius:.7rem;padding:.5rem;text-align:center;font-size:.75rem}
+.fontes a{display:inline-block;margin:.25rem .3rem;padding:.45rem .9rem;background:#fff;border-radius:2rem;text-decoration:none;color:var(--azul);font-size:.85rem;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.note{font-size:.8rem;color:var(--cinza);line-height:1.5;margin-top:.8rem}
+.loading{text-align:center;padding:2rem;color:var(--cinza)}
+footer{background:var(--azul);color:#cfe;padding:1.5rem;text-align:center;font-size:.85rem}
+footer a{color:#7fdcef}
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1643806355443576" crossorigin="anonymous"></script>
+</head>
+<body>
+<header><h1>⛅ ASF Tempo — Litoral Norte de SP</h1>
+<p>Previsão detalhada de 16 dias por cidade, chuva mm a mm, vento, umidade, UV e alertas automáticos. Dados Open-Meteo (modelos ECMWF/ICON), atualizados ao vivo a cada visita.</p></header>
+<div class="tabs" id="tabs"></div>
+<main>
+<div id="alertas"></div>
+<div class="card" id="hojeCard"><div class="loading">Carregando previsão ao vivo…</div></div>
+<div class="card"><h2>📅 Próximos 7 dias</h2><div class="grid7" id="grid7"></div></div>
+<div class="card"><h2>🕐 Hoje, hora a hora</h2><div class="horas" id="horas"></div></div>
+<div class="card"><h2>📆 Previsão estendida — 16 dias</h2><div style="overflow-x:auto"><table class="d16" id="tab16"></table></div>
+<p class="note">Além de 7 dias, a previsão é tendência: acertividade cai com a distância. Use os dias 8–16 para planejar (viagem, treino, evento) e confirme na véspera.</p></div>
+<div class="card"><h2>🚨 Alertas: como funciona e canais oficiais</h2>
+<p style="font-size:.92rem;line-height:1.6">O ASF Tempo gera <b>alertas automáticos</b> sobre a previsão numérica, inspirados nos níveis da Defesa Civil:</p>
+<table class="d16" style="margin-top:.5rem">
+<tr><th>Nível</th><th>Critério</th><th>Orientação</th></tr>
+<tr><td>🟢 Verde</td><td>Chuva &lt; 25 mm/dia, vento &lt; 40 km/h</td><td>Condições normais</td></tr>
+<tr><td>🟡 Amarelo (atenção)</td><td>Chuva 25–50 mm/dia ou vento 40–60 km/h ou trovoadas</td><td>Evite encostas e áreas de alagamento; acompanhe atualizações</td></tr>
+<tr><td>🟠 Laranja (perigo)</td><td>Chuva 50–80 mm/dia ou vento 60–80 km/h</td><td>Risco de alagamentos e quedas de árvore; evite travessias e trilhas</td></tr>
+<tr><td>🔴 Vermelho (grande perigo)</td><td>Chuva &gt; 80 mm/dia ou vento &gt; 80 km/h</td><td>Risco de deslizamentos na Serra do Mar; siga a Defesa Civil</td></tr>
+</table>
+<p class="note">⚠️ <b>Importante:</b> estes alertas são automáticos e não substituem os oficiais. Em situação de risco, consulte:</p>
+<div class="fontes" style="margin-top:.5rem">
+<a href="https://alertas2.inmet.gov.br/" target="_blank" rel="noopener">⚠️ INMET — Alertas oficiais</a>
+<a href="https://www.defesacivil.sp.gov.br/" target="_blank" rel="noopener">🛡️ Defesa Civil SP</a>
+<a href="https://www.cemaden.gov.br/" target="_blank" rel="noopener">🌧️ CEMADEN — chuva em tempo real</a>
+<a href="https://www.cptec.inpe.br/" target="_blank" rel="noopener">🛰️ CPTEC/INPE</a>
+<a href="https://acarolmourad-commits.github.io/asf-previsao/" target="_blank" rel="noopener">🌊 ASF Previsão (ondas e mar)</a>
+</div>
+<p class="note">📲 Defesa Civil SP: cadastre seu CEP no SMS <b>40199</b> para receber alertas oficiais gratuitos.</p>
+</div>
+</main>
+<footer>ASF — Associação de Surf Feminino · Dados: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC-BY 4.0) · <a href="https://acarolmourad-commits.github.io/asf-app/">App principal</a></footer>
+<footer style="padding:12px;text-align:center;font-size:12px;opacity:.75;background:transparent;color:var(--cinza)"><a href="https://acarolmourad-commits.github.io/asf-app/privacidade.html" target="_blank" rel="noopener">Privacidade</a> · <a href="https://acarolmourad-commits.github.io/asf-app/cookies.html" target="_blank" rel="noopener">Cookies</a> · <a href="https://acarolmourad-commits.github.io/asf-app/termos-de-uso.html" target="_blank" rel="noopener">Termos</a></footer>
+<script src="https://acarolmourad-commits.github.io/asf-app/asf-network.js" defer></script>
+<script>
+const CIDADES=[
+ {id:'ubatuba',nome:'Ubatuba',lat:-23.43,lon:-45.07},
+ {id:'caragua',nome:'Caraguatatuba',lat:-23.62,lon:-45.41},
+ {id:'sebastiao',nome:'São Sebastião',lat:-23.80,lon:-45.41},
+ {id:'ilhabela',nome:'Ilhabela',lat:-23.78,lon:-45.36}
+];
+const WMO={0:['☀️','Céu limpo'],1:['🌤️','Predom. sol'],2:['⛅','Parcial. nublado'],3:['☁️','Nublado'],45:['🌫️','Névoa'],48:['🌫️','Névoa'],51:['🌦️','Garoa fraca'],53:['🌦️','Garoa'],55:['🌧️','Garoa forte'],61:['🌦️','Chuva fraca'],63:['🌧️','Chuva moderada'],65:['🌧️','Chuva forte'],66:['🌧️','Chuva congelante'],67:['🌧️','Chuva congelante'],71:['🌨️','Neve fraca'],73:['🌨️','Neve'],75:['🌨️','Neve forte'],80:['🌦️','Pancadas fracas'],81:['🌧️','Pancadas'],82:['⛈️','Pancadas fortes'],95:['⛈️','Trovoada'],96:['⛈️','Trovoada c/ granizo'],99:['⛈️','Trovoada c/ granizo']};
+const DIAS=['dom','seg','ter','qua','qui','sex','sáb'];
+let dados={};
+let ativa='ubatuba';
+function wmo(c){return WMO[c]||['❓','—'];}
+function nivelAlerta(dia){
+ const a=[];
+ if(dia.rain>80||dia.wind>80) a.push(['vermelho','GRANDE PERIGO', dia.rain>80?`Chuva prevista de ${dia.rain} mm em 24h — risco elevado de deslizamentos e alagamentos.`:`Vendaval de até ${dia.wind} km/h.`]);
+ else if(dia.rain>50||dia.wind>60) a.push(['laranja','PERIGO', dia.rain>50?`Chuva forte prevista: ${dia.rain} mm — risco de alagamentos pontuais.`:`Vento forte de até ${dia.wind} km/h.`]);
+ else if(dia.rain>25||dia.wind>40||dia.code>=95) a.push(['amarelo','ATENÇÃO', dia.code>=95&&dia.rain<=25?'Trovoadas previstas — evite mar aberto e áreas desabrigadas.':dia.rain>25?`Chuva moderada a forte: ${dia.rain} mm previstos.`:`Vento de até ${dia.wind} km/h.`]);
+ return a;
+}
+async function carrega(c){
+ const u=`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weathercode,windspeed_10m,winddirection_10m&hourly=temperature_2m,precipitation_probability,precipitation,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,windspeed_10m_max,windgusts_10m_max,uv_index_max,sunrise,sunset&timezone=America/Sao_Paulo&forecast_days=16`;
+ const r=await fetch(u); return r.json();
+}
+function renderTabs(){
+ document.getElementById('tabs').innerHTML=CIDADES.map(c=>`<button class="${c.id===ativa?'ativo':''}" onclick="ativa='${c.id}';renderAll()">${c.nome}</button>`).join('');
+}
+function fmt(d){const x=new Date(d+'T12:00:00');return DIAS[x.getDay()]+' '+x.getDate()+'/'+(x.getMonth()+1);}
+function renderAll(){
+ renderTabs();
+ const d=dados[ativa]; if(!d){return;}
+ const c=CIDADES.find(x=>x.id===ativa);
+ const dias=d.daily.time.map((t,i)=>({t,rain:d.daily.precipitation_sum[i],prob:d.daily.precipitation_probability_max[i],wind:Math.round(d.daily.windgusts_10m_max[i]),code:d.daily.weathercode[i]}));
+ let html='';
+ const piores=dias.slice(0,7).map(dy=>({dy,a:nivelAlerta(dy)})).filter(x=>x.a.length);
+ if(!piores.length) html='<div class="alerta al-verde"><b>🟢 Sem alertas</b> — nenhuma chuva forte, vendaval ou trovoada prevista para '+c.nome+' nos próximos 7 dias.</div>';
+ else piores.slice(0,3).forEach(({dy,a})=>a.forEach(([niv,rot,msg])=>{html+=`<div class="alerta al-${niv}"><b>${niv==='vermelho'?'🔴':niv==='laranja'?'🟠':'🟡'} ${rot} — ${fmt(dy.t)}:</b> ${msg} <small>(alerta automático ASF — confirme nos canais oficiais)</small></div>`;}));
+ document.getElementById('alertas').innerHTML=html;
+ const cur=d.current, [ic,desc]=wmo(cur.weathercode);
+ const dirs=['N','NE','L','SE','S','SO','O','NO'];
+ document.getElementById('hojeCard').innerHTML=`<h2>Agora em ${c.nome}</h2><div class="hoje">
+ <div class="big">${Math.round(cur.temperature_2m)}°C</div>
+ <div style="font-size:2.4rem">${ic}</div>
+ <div><b>${desc}</b><br><small>Sensação ${Math.round(cur.apparent_temperature)}°C · Umidade ${cur.relative_humidity_2m}%<br>Vento ${Math.round(cur.windspeed_10m)} km/h ${dirs[Math.round(cur.winddirection_10m/45)%8]} · Chuva agora: ${cur.precipitation} mm</small></div>
+ <div style="margin-left:auto;font-size:.85rem;color:var(--cinza)">☀️ Nascer ${d.daily.sunrise[0].slice(11,16)} · Pôr ${d.daily.sunset[0].slice(11,16)}<br>UV máx hoje: ${d.daily.uv_index_max[0]}${d.daily.uv_index_max[0]>=6?' — use protetor!':''}</div></div>`;
+ document.getElementById('grid7').innerHTML=d.daily.time.slice(0,7).map((t,i)=>{
+  const [ic2]=wmo(d.daily.weathercode[i]);const p=d.daily.precipitation_sum[i];
+  return `<div class="day"><b>${i===0?'Hoje':fmt(t)}</b><div class="icone">${ic2}</div><div>${Math.round(d.daily.temperature_2m_min[i])}° / <b>${Math.round(d.daily.temperature_2m_max[i])}°</b></div><div class="barra"><i style="width:${Math.min(100,p/80*100)}%"></i></div><div>🌧️ ${p} mm (${d.daily.precipitation_probability_max[i]}%)</div><div>💨 ${Math.round(d.daily.windspeed_10m_max[i])} km/h</div></div>`;
+ }).join('');
+ const hoje=d.daily.time[0];
+ const idx=d.hourly.time.map((t,i)=>({t,i})).filter(x=>x.t.startsWith(hoje)&&parseInt(x.t.slice(11,13))%2===0);
+ document.getElementById('horas').innerHTML=idx.map(({t,i})=>{const [ic3]=wmo(d.hourly.weathercode[i]);return `<div class="hora"><b>${t.slice(11,16)}</b><br>${ic3} ${Math.round(d.hourly.temperature_2m[i])}°<br>🌧️ ${d.hourly.precipitation_probability[i]}%</div>`;}).join('');
+ document.getElementById('tab16').innerHTML='<tr><th>Dia</th><th>Tempo</th><th>Mín</th><th>Máx</th><th>Chuva</th><th>Prob.</th><th>Vento máx</th><th>Rajadas</th><th>UV</th></tr>'+
+  d.daily.time.map((t,i)=>{const [ic4,de4]=wmo(d.daily.weathercode[i]);const p=d.daily.precipitation_sum[i];
+   const cor=p>80?'#c0392b':p>50?'#e67e22':p>25?'#d4ac0d':'inherit';
+   return `<tr><td>${i===0?'<b>Hoje</b>':fmt(t)}</td><td title="${de4}">${ic4}</td><td>${Math.round(d.daily.temperature_2m_min[i])}°</td><td><b>${Math.round(d.daily.temperature_2m_max[i])}°</b></td><td style="color:${cor};font-weight:${p>25?'700':'400'}">${p} mm</td><td>${d.daily.precipitation_probability_max[i]}%</td><td>${Math.round(d.daily.windspeed_10m_max[i])} km/h</td><td>${Math.round(d.daily.windgusts_10m_max[i])} km/h</td><td>${d.daily.uv_index_max[i]}</td></tr>`;}).join('');
+}
+async function init(){
+ try{
+  for(const c of CIDADES){dados[c.id]=await carrega(c);}
+  renderAll();
+ }catch(e){document.getElementById('hojeCard').innerHTML='<div class="loading">Não foi possível carregar a previsão agora. Tente recarregar a página.</div>';}
+}
+init();
+</script>
+</body>
+</html>
